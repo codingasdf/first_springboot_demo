@@ -1,0 +1,23 @@
+
+#本地测试
+server:
+  port: 8088
+#  在所有端口开放
+  address: 0.0.0.0
+spring:
+  application:
+    name: demo
+  datasource:
+#    数据库配置在pom.xml也有一份，是关于liquibase-maven-plugin的配置
+    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url : jdbc:mysql://localhost:3306/{database_name}?serverTimezone=UTC
+    url : jdbc:mysql://localhost:3306/test_a?serverTimezone=UTC
+    username : 'springboot'
+    password : '00000000'
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+#    change-log: classpath:/db/changelog/changelog.xml
+#    drop-first: false
+#    contexts: dev
+

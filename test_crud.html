@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>test_frontend</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<h2>test_all_crud</h2>
+<hr>
+
+<!-- server_url -->
+<h3>server_url</h3>
+<form>
+    <label for="server_url">url:</label>
+    <input type="text" id="server_url" name="server_url" value="http://localhost:8088">
+
+    <button type="button" onclick="changeURL()">change URL</button>
+</form>
+
+
+<!-- select -->
+<h3>select</h3>
+<form>
+    <label for="id">id:</label>
+    <input type="text" id="id" name="id">
+
+    <label for="name">name:</label>
+    <input type="text" id="name" name="name">
+
+    <label for="phone">phone:</label>
+    <input type="text" id="phone" name="phone">
+
+    <button type="button" onclick="queryData()">select</button>
+</form>
+
+<!-- insert -->
+<h3>insert</h3>
+<form>
+    <label for="id_add">id:</label>
+    <input type="text" id="id_add" name="id_add">
+
+    <label for="name_add">name:</label>
+    <input type="text" id="name_add" name="name_add">
+
+    <label for="phone_add">phone:</label>
+    <input type="text" id="phone_add" name="phone_add">
+
+    <label for="increment">add:</label>
+    <input type="text" id="increment" name="increment" value="1">
+
+    <button type="button" onclick="addData()">insert</button>
+</form>
+
+<!-- updateById -->
+<h3>updateById</h3>
+<form>
+    <label for="id_update">id:</label>
+    <input type="text" id="id_update" name="id_update">
+
+    <label for="name_update">name:</label>
+    <input type="text" id="name_update" name="name_update">
+
+    <label for="phone_update">phone:</label>
+    <input type="text" id="phone_update" name="phone_update">
+
+    <button type="button" onclick="updateData()">update</button>
+</form>
+
+<!-- delete -->
+<h3>delete</h3>
+<form>
+    <label for="id_delete">id:</label>
+    <input type="text" id="id_delete" name="id_delete" value="16">
+
+    <label for="name_delete">name:</label>
+    <input type="text" id="name_delete" name="name_delete">
+
+    <label for="phone_delete">phone:</label>
+    <input type="text" id="phone_delete" name="phone_delete">
+
+    <button type="button" onclick="deleteData()">delete</button>
+</form>
+
+<!-- output -->
+<h3>output:</h3>
+<textarea id="result" rows="20" cols="50"></textarea>
+
+
+
+
+
+
+
+<script>
+    var BASE_URL = document.getElementById("server_url").value; // Spring Boot 后端根 URL
+
+    function changeURL() {
+        BASE_URL = $('#server_url').val();
+    }
+
+    // 查询数据
+    function queryData() {
+        const id = $('#id').val();
+        const name = $('#name').val();
+        const phone = $('#phone').val();
+        $.ajax({
+            url: `${BASE_URL}/select?id=${id}&name=${name}&phone=${phone}`,
+            type: 'GET',
+            dataType: 'json',
+            success: function(result) {
+                const data = result.map(item => `id:${item.id},name:${item.name},phone:${item.phone}`);
+                $('#result').val(data.join('\n'));
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // 添加数据
+    function addData() {
+        const id = $('#id_add').val();
+        const name = $('#name_add').val();
+        const phone = $('#phone_add').val();
+
+        // 获取输入框的值
+        var idAdd = parseInt(document.getElementById("id_add").value);
+        var increment = parseInt(document.getElementById("increment").value);
+        // 计算加法结果并更新输入框的值
+        if (increment && !isNaN(idAdd)) {
+            document.getElementById("id_add").value = idAdd + increment;
+        }
+
+        $.ajax({
+            url: `${BASE_URL}/insert?id=${id}&name=${name}&phone=${phone}`,
+            type: 'POST',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ id, name, phone }),
+            success: function(result) {
+                $('#result').val(`success:${result}\nid:${id},name:${name},phone:${phone}`);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // 修改数据
+    function updateData() {
+        const id = $('#id_update').val();
+        const name = $('#name_update').val();
+        const phone = $('#phone_update').val();
+        $.ajax({
+            url: `${BASE_URL}/updateById?id=${id}&name=${name}&phone=${phone}`,
+            type: 'PUT',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ id, name, phone }),
+            success: function(result) {
+                $('#result').val(`success:${result}\nid:${id},name:${name},phone:${phone}`);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    // 删除数据
+    function deleteData() {
+        const id = $('#id_delete').val();
+        const name = $('#name_delete').val();
+        const phone = $('#phone_delete').val();
+        $.ajax({
+            url: `${BASE_URL}/delete?id=${id}&name=${name}&phone=${phone}`,
+            type: 'DELETE',
+            dataType: 'json',
+            contentType: 'application/json',
+            data: JSON.stringify({ id, name, phone }),
+            success: function(result) {
+                $('#result').val(`success:${result}\nid:${id},name:${name},phone:${phone}`);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+</script>
+</body>
+</html>
