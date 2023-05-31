@@ -1022,11 +1022,11 @@ spring:
 正常情况也就是初次部署项目的时候，people是不存在的，在这时候运行项目，会在数据库中生成“DATABASECHANGELOG”，“DATABASECHANGELOGLOCK”以及“people”共3张表，后续测试crud都正常
 
 
-这时候把test_a数据库内全部内容3张表删除，再次运行
+这时候把test_a数据库内全部内容3张表删除，即删除数据库test_a内全部表，再次运行
 
 可见成功生成3张表，其中“DATABASECHANGELOG”内记录下的“EXECTYPE”字段为“EXECUTED”，可见正常执行
 
-然后把test_a数据库内“DATABASECHANGELOG”，“DATABASECHANGELOGLOCK”两张表删除，即删除数据库test_a内全部表
+然后把test_a数据库内“DATABASECHANGELOG”，“DATABASECHANGELOGLOCK”两张表删除，只保留“people”表
 
 这时候再次运行项目，会发现项目也可以正常运行，且“DATABASECHANGELOG”内记录下的“EXECTYPE”字段为“MARK_RAN”，表示在创建时已经跳过并记录了这个表
 
